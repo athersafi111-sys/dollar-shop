@@ -1,0 +1,21 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <h1>Login page</h1>
+    <form action="/login" method="post">
+         <input type="email" placeholder="email" name="email" required>
+         <input type="password" placeholder="password" name="password" required>
+         <label><input type="checkbox" name="isAdminCheck"> Login as Admin</label><br><br>
+         <input type="submit" value="Login user">
+    </form>
+    <button onclick="window.location.href='/'">Back To Home</button>
+    <button onclick="window.location.href='/signup'">Signup</button>
+</body>
+</html>

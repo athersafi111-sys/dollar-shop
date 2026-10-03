@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body id="dollarDisplayPage">
+    <h1 style="text-align: center;">Dollar</h1><% if(isAdmin){ %>
+  <a href="/logout" style="float:right;">Logout Admin</a>
+<% } %>
+<% if(isAdmin){ %>
+  <a href="/dollarAdmin" style="float:right;">Add Products</a>
+<% } %>
+     <h2 style="text-align: center;">1 Dollar Products</h2>
+     <h3>Household/kitchen items </h3>
+     <div id="houseHold">
+    <div class="products">
+          <% if(products.length > 0){ %> 
+       <% products.forEach(function(product){ %>
+        <div class="product">
+            <div>
+                <figure class="image"><img src="<%= product.image %>" alt="" height="70" width="100">
+                    <figcaption style="font-weight: bold;text-align: center;"><%= product.name %></figcaption>
+                <p><%= product.detail %></p></figure>
+            </div>
+            <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
+  <div>
+    <a href="/delete/<%= product._id %>">Delete</a>
+    <a href="/editProduct/<%= product._id %>">Edit</a>
+  </div>
+<% } %>
+        </div>
+        <% }) %>
+        <% } else { %>
+              <h3>NO Product YET</h3><% } %>
+    </div>
+    </div>
+     <button onclick="window.location.href='/'">Back To Home</button>
+</body>
+</html>

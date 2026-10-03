@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <h1>All Users</h1>
+    <div class="users">
+          <% if(users.length > 0){ %> 
+       <% users.forEach(function(user){ %>
+        <div class="user">
+            <div>
+                <img src="<%= user.image %>" alt="" height="100" width="100">
+            </div>
+            <h3><%= user.username %></h3>
+            <h3><%= user.email %></h3>
+        </div>
+        <% }) %>
+        <% } else { %>
+              <h3>NO USER YET</h3><% } %>
+    </div>
+       
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+      <h1> <%= username %> Display</h1>
+      <% if(username){ %>
+  <a href="/logout">Logout</a>
+<% } %>
+    <h1 style="text-align: center;">Tamman 1 Dollar Shop</h1>
+  <nav id="nav-bar">
+    <a class='nav-item' href="#">Location</a>
+    <a class='nav-item' href="#">About us</a>
+    <a class='nav-item' href="#">Contact</a>
+    <a class='nav-item' href="/Signup">Signup/Login</a>
+  </nav>
+   <h3>Updated On : <%= new Date(lastUpdated).toLocaleString('en-PK', { dateStyle: 'medium', timeStyle: 'short' }) %></h3>
+  <section id="content">
+    <figure onclick="window.location.href='/dollar'">
+    <img src="/images/folder.png" height="80px" width="80px">
+    <figcaption>1 Dollar</figcaption>
+    </figure>
+    <figure onclick="window.location.href='/rayal'">
+    <img src="/images/folder.png" height="80px" width="80px">
+    <figcaption>1 Rayal</figcaption>
+    </figure>
+  </section>
+</body>
+</html>
