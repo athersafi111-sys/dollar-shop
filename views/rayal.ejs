@@ -5,9 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+  .image img {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 5;
+  }
+  .image img.zoomed {
+    transform: scale(1.5);
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    border-radius: 8px;
+  }
+  .search-box{
+    width: 80%; max-width: 300px; padding: 8px 15px; 
+    border: 1px solid #ccc; border-radius: 20px; outline: none;
+  }
+</style>
 </head>
-<body>
-    <h1>Rayal</h1>
-     <button onclick="window.location.href='/'">Back To Home</button>
+<body class="dollarDisplayPage" style="background-color:<%= bgColor %>;min-height : 100vh;">
+    <h1 style="text-align: center;">One Rayal Page</h1>
+    <button class="btn" onclick="window.location.href='/'">Home</button>
+    <% if(isAdmin){ %>
+      <a class="btn" href="/logout" style="float:right;text-decoration: none;height: 26px;width: 110px;padding-left: 10px;">Logout Admin</a>
+    <% } %>
+    <% if(isAdmin){ %>
+      <a class="btn" href="/dollarAdmin" style="float:right; margin-right:15px;text-decoration: none;height: 26px;width: 110px;padding-left: 10px;">Add Products</a>
+    <% } %>
+
+    <h3>One Rayal Items</h3>
+
+    <!-- SEARCH ADDED -->
+    <div style="margin: 10px 0; text-align: center;">
+      <input type="text" id="searchPremium" placeholder="Search premium items..." class="search-box"
+      onkeyup="filterCategory('searchPremium', '.premium', '.premium-name')">
+    </div>
+     
+        <div class="rayals">
+          <% if(rayals.length > 0){ %> 
+            <% rayals.forEach(function(rayal){ %>
+              <% 
+                let isNew = false;
+                if(rayal.createdAt){
+                  let hoursDiff = (new Date() - new Date(rayal.createdAt)) / (1000*60*60);
+                  if(hoursDiff < 24) isNew = true;
+                } else if(rayal._id){
+                  let hoursDiff = (new Date() - new Date(parseInt(premium._id.toString().substring(0,8), 16)*1000)) / (1000*60*60);
+                  if(hoursDiff < 24) isNew = true;
+                }
+              %>
+              <div class="rayal" style="position:relative;">
+                <% if(isNew){ %>
+                  <span style="position:absolute; top:0px; right:25px; background:red; color:white; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:bold; z-index:10;">NEW</span>
+                <% } %>
+                <div>
+                    <figure class="image">
+                        <img onclick="zoomTemp(this)" src="<%= rayal.image %>" alt="" height="70" width="80">
+                        <figcaption style="font-weight: bold;text-align: center;" class="rayal-name"><%= rayal.name %></figcaption>
+                    </figure>
+                </div>
+                <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
+                  <div class="editDelete">
+                    <a href="/deleteRayal/<%= rayal._id %>">Delete</a>
+                    <a href="/editProduct/<%= rayal._id %>">Edit</a>
+                  </div>
+                <% } %>
+              </div>
+            <% }) %>
+          <% } else { %>
+              <h3>NO Product YET</h3>
+          <% } %>
+        </div>
+    
+<script>
+function zoomTemp(img){
+  img.classList.add('zoomed');
+  setTimeout(() => {
+    img.classList.remove('zoomed');
+  }, 2000);
+}
+function filterCategory(inputId, itemClass, nameClass) {
+  let input = document.getElementById(inputId).value.toLowerCase();
+  let items = document.querySelectorAll(itemClass);
+  items.forEach(function(item) {
+    let nameEl = item.querySelector(nameClass);
+    if(!nameEl) return;
+    let name = nameEl.textContent.toLowerCase();
+    item.style.display = name.includes(input) ? "" : "none";
+  });
+}
+</script>
 </body>
 </html>

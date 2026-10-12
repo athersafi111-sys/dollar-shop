@@ -7,16 +7,24 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-    <h1>Sign up page</h1>
-    <h2>Create user</h2>
-        <form action="/create" method="post">
-            <input placeholder="name" type="text" name="name">
-            <input placeholder="email" type="email" name="email">
-            <input placeholder="image url" type="text" name="image">
-            <input placeholder="password" type="password" name="password">
-            <input type="submit" value="Create User">
-        </form>
-     <button onclick="window.location.href='/'">Back To Home</button>
-     <button onclick="window.location.href='/login'">Login</button>
+    <div style="">
+<button class="btn" onclick="window.location.href='/'"> Home</button>
+    </div>
+    <fieldset style="width: 350px;"><legend style="font-weight: bold;font-size: 30px;text-align: center;">Signup</legend>
+<form style="display: flex; flex-direction:column ; justify-content: center; align-items: center; width: 300px;padding-left: 20px;" action="/create" method="POST" enctype="multipart/form-data" style="max-width:400px; margin:auto;">
+    <input type="text" name="name" placeholder="Name" required style="width:100%; padding:10px; margin:5px 0;">
+    <input type="email" name="email" placeholder="Email" required style="width:100%; padding:10px; margin:5px 5px;">
+    <input type="password" name="password" placeholder="Password" required style="width:100%; padding:10px; margin:5px 0;"> 
+    <label style="display:block; margin-top:10px; font-weight:bold;">Profile Photo / تصویر</label>
+    <input type="file" name="image" accept="image/*" capture="user" 
+           style="width:100%; padding:10px; border:2px dashed #23e911; border-radius:5px; background:white;">
+    <small style="color:rgb(10, 10, 10);">Gallery or Camera se select karein</small><br>
+
+    <button style="width: auto;" type="submit" class="btn">
+        Create Account
+    </button>
+</form>
+</fieldset>
+
 </body>
 </html>

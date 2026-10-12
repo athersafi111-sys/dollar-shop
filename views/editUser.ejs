@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width"><title>Edit User</title>
+<style>body{background:#f8fafc; font-family:sans-serif; display:flex; justify-content:center; align-items:center; min-height:100vh; margin:0}
+.card{background:white; border-radius:16px; padding:20px; width:90%; max-width:400px; box-shadow:0 10px 30px rgba(0,0,0,.08)}
+input{width:100%; padding:12px; margin:8px 0; border:1px solid #e2e8f0; border-radius:10px; box-sizing:border-box}
+button{width:100%; padding:12px; background:#0f172a; color:white; border:none; border-radius:10px; font-weight:700; margin-top:10px}
+a{display:block; text-align:center; margin-top:12px; color:#64748b; text-decoration:none; font-size:13px}
+</style></head>
+<body>
+<div class="card">
+<h3 style="text-align:center">Edit User</h3>
+<img src="<%= user.image %>" style="width:80px; height:80px; border-radius:12px; display:block; margin:10px auto; object-fit:cover;">
+<form action="/updateUser/<%= user._id %>" method="POST" enctype="multipart/form-data">
+<input type="text" name="userName" value="<%= user.userName %>" required>
+<input type="email" name="email" value="<%= user.email %>" required>
+<input type="file" name="image" accept="image/*">
+<button type="submit">Update User</button>
+</form>
+<a href="/users">← Back</a>
+</div>
+</body></html>

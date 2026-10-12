@@ -5,38 +5,258 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+  .image img {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 5;
+  }
+  .image img.zoomed {
+    transform: scale(1.5);
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    border-radius: 8px;
+  }
+  .search-box{
+    width: 80%; max-width: 300px; padding: 8px 15px; 
+    border: 1px solid #ccc; border-radius: 20px; outline: none;
+  }
+</style>
 </head>
-<body id="dollarDisplayPage">
-    <h1 style="text-align: center;">Dollar</h1><% if(isAdmin){ %>
-  <a href="/logout" style="float:right;">Logout Admin</a>
-<% } %>
-<% if(isAdmin){ %>
-  <a href="/dollarAdmin" style="float:right;">Add Products</a>
-<% } %>
-     <h2 style="text-align: center;">1 Dollar Products</h2>
-     <h3>Household/kitchen items </h3>
-     <div id="houseHold">
-    <div class="products">
-          <% if(products.length > 0){ %> 
-       <% products.forEach(function(product){ %>
-        <div class="product">
+<body class="dollarDisplayPage" style="background-color:<%= bgColor %>;min-height : 100vh;">
+    <h1 style="text-align: center;">One Dollar Page</h1>
+    
+    <% if(isAdmin){ %>
+      <a class="btn" href="/logout" style="float:right;border;text-decoration: none;height: 26px;width: 110px;padding-left: 10px;">Logout Admin</a>
+      <a class="btn" href="/dollarAdmin" style="float:right; margin-right:15px;text-decoration: none;height: 26px;width: 110px;padding-left: 10px;">Add Products</a>
+    <% } %>
+  <button class="btn" onclick="window.location.href='/'"> Home</button>
+
+    <h3 style="text-align: center;">Household/kitchen items </h3>
+    <div style="margin: 10px 0; text-align: center;">
+      <input type="text" id="searchInput" placeholder="Search household..." class="search-box"
+      onkeyup="filterCategory('searchInput', '.product', '.product-name')">
+    </div>
+    <div class="products" id="productsContainer">
+      <% if(products.length > 0){ %> 
+        <% products.forEach(function(product){ %>
+          <% 
+            let isNew = false;
+            if(product.createdAt){
+              let hoursDiff = (new Date() - new Date(product.createdAt)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            } else if(product._id){
+              let hoursDiff = (new Date() - new Date(parseInt(product._id.toString().substring(0,8), 16)*1000)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            }
+          %>
+          <div class="product" style="position:relative;">
+            <% if(isNew){ %>
+              <span style="position:absolute; top:0px; right:25px; background:red; color:white; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:bold; z-index:10;">NEW</span>
+            <% } %>
             <div>
-                <figure class="image"><img src="<%= product.image %>" alt="" height="70" width="100">
-                    <figcaption style="font-weight: bold;text-align: center;"><%= product.name %></figcaption>
-                <p><%= product.detail %></p></figure>
+                <figure class="image">
+                    <img onclick="zoomTemp(this)" src="<%= product.image %>" alt="" height="70" width="80">
+                    <figcaption style="font-weight: bold;text-align: center;" class="product-name"><%= product.name %></figcaption>
+                </figure>
             </div>
             <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
-  <div>
-    <a href="/delete/<%= product._id %>">Delete</a>
-    <a href="/editProduct/<%= product._id %>">Edit</a>
-  </div>
-<% } %>
-        </div>
+              <div class="editDelete">
+                <a href="/delete/<%= product._id %>">Delete</a>
+                <a href="/editProduct/<%= product._id %>">Edit</a>
+              </div>
+            <% } %>
+          </div>
         <% }) %>
-        <% } else { %>
-              <h3>NO Product YET</h3><% } %>
+      <% } else { %>
+          <h3>NO Product YET</h3>
+      <% } %>
     </div>
+    
+    <h3 style="text-align: center;">Children Corner</h3>
+    <div style="margin: 10px 0; text-align: center;">
+      <input type="text" id="searchChildren" placeholder="Search children Items..." class="search-box"
+      onkeyup="filterCategory('searchChildren', '.children', '.children-name')">
     </div>
-     <button onclick="window.location.href='/'">Back To Home</button>
+    <div class="childrens">
+      <% if(childrens.length > 0){ %> 
+        <% childrens.forEach(function(children){ %>
+          <% 
+            let isNew = false;
+            if(children.createdAt){
+              let hoursDiff = (new Date() - new Date(children.createdAt)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            } else if(children._id){
+              let hoursDiff = (new Date() - new Date(parseInt(children._id.toString().substring(0,8), 16)*1000)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            }
+          %>
+          <div class="children" style="position:relative;">
+            <% if(isNew){ %>
+              <span style="position:absolute; top:0px; right:25px; background:red; color:white; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:bold; z-index:10;">NEW</span>
+            <% } %>
+            <div>
+                <figure class="image">
+                    <img onclick="zoomTemp(this)" src="<%= children.image %>" alt="" height="70" width="80">
+                    <figcaption style="font-weight: bold;text-align: center;" class="children-name"><%= children.name %></figcaption>
+                </figure>
+            </div>
+            <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
+              <div class="editDelete">
+                <a href="/deleteChildren/<%= children._id %>">Delete</a>
+                <a href="/editProduct/<%= children._id %>">Edit</a>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+          <h3>NO Product YET</h3>
+      <% } %>
+    </div>
+
+    <h3 style="text-align: center;">Ladies corner</h3>
+    <div style="margin: 10px 0; text-align: center;">
+      <input type="text" id="searchLadies" placeholder="Search ladies Items..." class="search-box"
+      onkeyup="filterCategory('searchLadies', '.lady', '.lady-name')">
+    </div>
+    <div class="ladies">
+      <% if(ladies.length > 0){ %> 
+        <% ladies.forEach(function(lady){ %>
+          <% 
+            let isNew = false;
+            if(lady.createdAt){
+              let hoursDiff = (new Date() - new Date(lady.createdAt)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            } else if(lady._id){
+              let hoursDiff = (new Date() - new Date(parseInt(lady._id.toString().substring(0,8), 16)*1000)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            }
+          %>
+          <div class="lady" style="position:relative;">
+            <% if(isNew){ %>
+              <span style="position:absolute; top:0px; right:25px; background:red; color:white; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:bold; z-index:10;">NEW</span>
+            <% } %>
+            <div>
+                <figure class="image">
+                    <img onclick="zoomTemp(this)" src="<%= lady.image %>" alt="" height="70" width="80">
+                    <figcaption style="font-weight: bold;text-align: center;" class="lady-name"><%= lady.name %></figcaption>
+                </figure>
+            </div>
+            <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
+              <div class="editDelete">
+                <a href="/deleteLady/<%= lady._id %>">Delete</a>
+                <a href="/editProduct/<%= lady._id %>">Edit</a>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+          <h3>NO Product YET</h3>
+      <% } %>
+    </div>
+
+    <h3 style="text-align: center;">Seasonal items</h3>
+    <div style="margin: 10px 0; text-align: center;">
+      <input type="text" id="searchSeasons" placeholder="Search seasonal Items..." class="search-box"
+      onkeyup="filterCategory('searchSeasons', '.season', '.season-name')">
+    </div>
+    <div class="seasons">
+      <% if(seasons.length > 0){ %> 
+        <% seasons.forEach(function(season){ %>
+          <% 
+            let isNew = false;
+            if(season.createdAt){
+              let hoursDiff = (new Date() - new Date(season.createdAt)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            } else if(season._id){
+              let hoursDiff = (new Date() - new Date(parseInt(season._id.toString().substring(0,8), 16)*1000)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            }
+          %>
+          <div class="season" style="position:relative;">
+            <% if(isNew){ %>
+              <span style="position:absolute; top:0px; right:25px; background:red; color:white; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:bold; z-index:10;">NEW</span>
+            <% } %>
+            <div>
+                <figure class="image">
+                    <img onclick="zoomTemp(this)" src="<%= season.image %>" alt="" height="70" width="80">
+                    <figcaption style="font-weight: bold;text-align: center;" class="season-name"><%= season.name %></figcaption>
+                </figure>
+            </div>
+            <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
+              <div class="editDelete">
+                <a href="/deleteSeason/<%= season._id %>">Delete</a>
+                <a href="/editProduct/<%= season._id %>">Edit</a>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+          <h3>NO Product YET</h3>
+      <% } %>
+    </div>
+
+    <h3 style="text-align: center;">Misc items</h3>
+    <div style="margin: 10px 0; text-align: center;">
+      <input type="text" id="searchOthers" placeholder="Search Misc..." class="search-box"
+      onkeyup="filterCategory('searchOthers', '.other', '.other-name')">
+    </div>
+    <div class="others">
+      <% if(others.length > 0){ %> 
+        <% others.forEach(function(other){ %>
+          <% 
+            let isNew = false;
+            if(other.createdAt){
+              let hoursDiff = (new Date() - new Date(other.createdAt)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            } else if(other._id){
+              let hoursDiff = (new Date() - new Date(parseInt(other._id.toString().substring(0,8), 16)*1000)) / (1000*60*60);
+              if(hoursDiff < 24) isNew = true;
+            }
+          %>
+          <div class="other" style="position:relative;">
+            <% if(isNew){ %>
+              <span style="position:absolute; top:0px; right:25px; background:red; color:white; padding:1px 8px; border-radius:10px; font-size:8px; font-weight:bold; z-index:10;">NEW</span>
+            <% } %>
+            <div>
+                <figure class="image">
+                    <img onclick="zoomTemp(this)" src="<%= other.image %>" alt="" height="70" width="80">
+                    <figcaption style="font-weight: bold;text-align: center;" class="other-name"><%= other.name %></figcaption>
+                </figure>
+            </div>
+            <% if(typeof isAdmin !== 'undefined' && isAdmin){ %>
+              <div class="editDelete">
+                <a href="/deleteOther/<%= other._id %>">Delete</a>
+                <a href="/editProduct/<%= other._id %>">Edit</a>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      <% } else { %>
+          <h3>NO Product YET</h3>
+      <% } %>
+    </div>
+    
+    <button onclick="window.location.href='/'">Back To Home</button>
+    
+<script>
+function zoomTemp(img){
+  img.classList.add('zoomed');
+  setTimeout(() => {
+    img.classList.remove('zoomed');
+  }, 2000);
+}
+function filterCategory(inputId, itemClass, nameClass) {
+  let input = document.getElementById(inputId).value.toLowerCase();
+  let items = document.querySelectorAll(itemClass);
+  items.forEach(function(item) {
+    let nameEl = item.querySelector(nameClass);
+    if(!nameEl) return;
+    let name = nameEl.textContent.toLowerCase();
+    item.style.display = name.includes(input) ? "" : "none";
+  });
+}
+</script>
 </body>
 </html>

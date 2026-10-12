@@ -10,12 +10,12 @@
     <h1>Update Product</h1>
     <div>
         <h3>Household/kitchen items</h3>
-        <form action="/update/<%= product._id %>"  method="post">
-            <input placeholder="name" type="text" name="name" value="<%= product.name %>">
-            <input placeholder="image url" type="text" name="image" value="<%= product.image %>">
-            <input placeholder="detail" type="text" name="detail"value="<%= product.detail %>">
-            <input type="submit" value="Update Product">
-    </form>
+       <form action="/update/<%= product._id %>" method="post" enctype="multipart/form-data">
+  <input type="text" name="name" value="<%= product.name %>">
+  <input type="file" name="image" accept="image/*">
+
+  <input type="submit" value="Update">
+</form>
     </div>
 </body>
 </html>

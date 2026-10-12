@@ -1,33 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tamman 1 Dollar Shop</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <style>
+    /* Notification Bar */
+.notification-bar{
+  background: linear-gradient(90deg, #fef9c3, #fef08a) !important;
+  color: #854d0e !important;
+  border: 1px solid #fde047;
+  border-radius: 10px;
+  margin: 10px 12px;
+  width: auto !important;
+  box-shadow: none !important;
+  font-size: 13px;
+}
+    .notification-track{ display: inline-block; animation: scroll 15s linear infinite; }
+    @keyframes scroll { 0% { transform: translateX(-40%); } 100% { transform: translateX(-100%); } }
+   .feedback-box{
+  background: white; border: 1px solid #e2e8f0; border-radius: 16px;
+  padding: 18px; margin: 12px auto; max-width: 500px; 
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+    .feedback-box h3{ text-align:center; margin-bottom:10px; color:#2d3436; }
+    .feedback-box input, .feedback-box textarea{
+      width: 95%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px;
+    }
+ .feedback-box button{
+  background: #16a34a; color: white; border-radius: 10px; padding: 12px;
+}
+  </style>
 </head>
-<body>
-      <h1> <%= username %> Display</h1>
-      <% if(username){ %>
-  <a href="/logout">Logout</a>
-<% } %>
-    <h1 style="text-align: center;">Tamman 1 Dollar Shop</h1>
+<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor !== 'undefined' ? bgColor : '#ffffff' %>; min-height:100vh;">
+  <div style="display: flex;justify-content: center;gap: 8px;border-radius: 0 0 30px 30px;background-color: rgb(35, 233, 17);margin-top: 0%;">
+    <img src="/images/Flag_of_Pakistan.svg.webp" height="20" width="50" style="border-radius:5px;position:relative;top:23px;box-shadow:1px 5px 5px;">
+    <h2 style="text-align:center; font-size:25px;">Tamman 1 Dollar Shop</h2>
+  </div>
+      
+  <h3 style="margin-top: 2px;margin-bottom: 2px;"><%= username %> Welcome <span style="position:relative;left:200px;">خوش آمدید</span></h3>
+  <div class="calenders" style="display:flex; justify-content:space-between; align-items:center; background:white; border:2px solid #23e911;background-color: #23e911; border-radius:12px; padding:2px 15px; margin:5px 0; box-shadow:0 3px 10px rgba(0,0,0,0.1); flex-wrap:wrap; gap:10px;">
+  <div style="text-align:left; flex:1;">
+    <small style="color:#636e72; font-weight:bold; font-size:11px;">ENGLISH</small>
+    <div id="englishDate" style="font-size:14px; font-weight:bold; color:#2d3436;"></div>
+    <div id="englishTime" style="font-size:12px; color:#636e72;"></div>
+  </div>
+  <div style="width:2px; height:40px; background:#dfe6e9;"></div>
+  <div style="text-align:right; flex:1;" dir="rtl">
+    <small style="color:#636e72; font-weight:bold; font-size:11px;">اسلامی</small>
+    <div id="hijriDate" style="font-size:15px; font-weight:bold; color:#2d3436; font-family:'Jameel Noori Nastaleeq', serif;"></div>
+    <div id="hijriTime" style="font-size:12px; color:#636e72;"></div>
+  </div>
+
+</div>
+
+<script>
+function updateCalendars(){
+  const now = new Date();
+  const engDate = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+  const engTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('englishDate').innerText = engDate;
+  document.getElementById('englishTime').innerText = engTime;
+
+  const urduMonths = ["محرم","صفر","ربیع الاول","ربیع الثانی","جمادی الاول","جمادی الثانی","رجب","شعبان","رمضان","شوال","ذوالقعدہ","ذوالحجہ"];
+  const hijriParts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { day: 'numeric', month: 'numeric', year: 'numeric' }).formatToParts(now);
+  let hDay = hijriParts.find(p=>p.type=='day').value;
+  let hMonth = hijriParts.find(p=>p.type=='month').value;
+  let hYear = hijriParts.find(p=>p.type=='year').value;
+  const toUrduNum = (n) => n.toString().replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+  document.getElementById('hijriDate').innerText = `${toUrduNum(hDay)} ${urduMonths[parseInt(hMonth)-1]} ${toUrduNum(hYear)}ھ`;
+  document.getElementById('hijriTime').innerText = now.toLocaleTimeString('ur-PK', { hour: '2-digit', minute: '2-digit' });
+}
+updateCalendars();
+setInterval(updateCalendars, 1000);
+</script>
   <nav id="nav-bar">
-    <a class='nav-item' href="#">Location</a>
-    <a class='nav-item' href="#">About us</a>
-    <a class='nav-item' href="#">Contact</a>
-    <a class='nav-item' href="/Signup">Signup/Login</a>
+    <a class='nav-item' href="">Location</a>
+    <a class='nav-item' href="">Offers</a>
+    <a class='nav-item' href="/Signup">Signup</a>
+    <a class='nav-item' href="/login">Login</a>
+    <% if(username){ %>
+    <a class='nav-item' href="/logout">Logout</a>
+  <% } %>
+  <% if(isAdmin){ %>
+      <a class="" href="/logout" style="float:right;text-decoration: none;color: black;">Logout Admin</a>
+    <% } %>
   </nav>
-   <h3>Updated On : <%= new Date(lastUpdated).toLocaleString('en-PK', { dateStyle: 'medium', timeStyle: 'short' }) %></h3>
+
+  <% if(typeof notification !== 'undefined' && notification && notification.trim() !== ''){ %>
+  <div class="notification-bar">
+    <div class="notification-track">
+      <span>🔔 <%= notification %> &nbsp;&nbsp;&nbsp; 🔔 <%= notification %> &nbsp;&nbsp;&nbsp; 🔔 <%= notification %></span>
+    </div>
+  </div>
+  <% } %>
+      
   <section id="content">
+    <figure onclick="window.location.href='/twoDollar'">
+      <img class="folder" style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
+      <figcaption class="seperator">2 Dollar <br> <%= twoDollarRate %> Rupees</figcaption>
+    </figure>
     <figure onclick="window.location.href='/dollar'">
-    <img src="/images/folder.png" height="80px" width="80px">
-    <figcaption>1 Dollar</figcaption>
+      <img style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
+      <figcaption class="seperator">1 Dollar <br> <%= dollarRate %> Rupees</figcaption>
     </figure>
     <figure onclick="window.location.href='/rayal'">
-    <img src="/images/folder.png" height="80px" width="80px">
-    <figcaption>1 Rayal</figcaption>
+      <img style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
+      <figcaption class="seperator">1 Rayal<br><%= rayalRate %> Rupees</figcaption>
     </figure>
+    <div class="feedback-box">
+      <h3>💬 Give Your Feedback / رائے دیں</h3>
+      <form action="/feedback" method="POST">
+        <input type="text" name="name" placeholder="Your Name / آپ کا نام" required>
+        <textarea name="message" rows="3" placeholder="Your Feedback / آپ کی رائے..." required></textarea>
+        <button type="submit">Send Feedback</button>
+      </form>
+    </div>
+
+    <p>New Items Addition On : <%= new Date(lastUpdated).toLocaleString('en-PK', { dateStyle: 'medium', timeStyle: 'short' }) %></p>
   </section>
+
+  <script>
+    if('<%= typeof notification !== "undefined" ? notification : "" %>' !== ''){
+      if(Notification && Notification.permission !== "denied"){
+        Notification.requestPermission().then(perm=>{
+          if(perm === "granted"){
+            new Notification("Tamman 1 Dollar Shop", { body: "<%= typeof notification !== 'undefined' ? notification : '' %>", icon: "/images/folder.png" });
+          }
+        });
+      }
+    }
+  </script>
 </body>
 </html>

@@ -6,16 +6,121 @@
     <title>Document</title>
      <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body>
-    <h1>Dollar Admin</h1>
-    <div>
-        <h3>Household/kitchen items</h3>
-        <form action="/dollar"  method="post">
-            <input placeholder="name" type="text" name="name">
-            <input placeholder="image url" type="text" name="image">
-            <input placeholder="detail" type="text" name="detail">
-            <input type="submit" value="Create Dollar Product">
+<body class="dollarDisplayPage" style="background-color:<%= bgColor %>;min-height : 100vh;">
+      <h1 style="text-align: center;">Dollar Admin</h1>
+      <div style="margin-bottom: 10px;display: flex;justify-content: space-between;align-items: center;">
+        <button class="btn" onclick="window.location.href='/'"> Home</button>
+        <a href="/changeAdminPassword" style="background:#0f172a;color:white;padding:10px 16px;border-radius:10px;text-decoration:none;font-weight:600;">Change Admin Password</a>
+    <a class="btn" style="text-decoration: none;" onclick="window.location.href='/feedbacks'">Check Feedbacks</a>
+     <a class="btn" style="text-decoration: none;" onclick="window.location.href='/users'">All Users</a>
+  </div>
+    
+ <div class="admin" style="background:#ffeaa7; padding:15px; border:2px dashed #e17055; margin-bottom:20px;">
+    <h3 style="text-align: center; color:#d63031;">🔔 Update Notification Bar</h3>
+    
+    <% if(notification && notification.trim() !== ''){ %>
+      <p style="text-align:center; color:green; font-weight:bold;">
+        Active: "<%= notification %>" 
+        <% if(notificationExpiresAt){ %>
+          | Expires: <%= new Date(notificationExpiresAt).toLocaleString('en-PK') %>
+          | Left: <%= Math.max(0, Math.ceil((new Date(notificationExpiresAt) - new Date())/ (1000*60*60))) %>h
+        <% } else { %> | Permanent <% } %>
+      </p>
+    <% } %>
+
+    <form class="admin1" action="/updateNotification" method="post">
+        <input class="input" placeholder="Write notification - e.g. New Stock Arrived!" type="text" name="notification" value="<%= typeof notification !== 'undefined' ? notification : '' %>" required style="width:60%;">
+        
+        <select name="duration" class="input" style="width:40%; padding:8px;" required>
+            <option value="24" <%= notificationDuration == 24 ? 'selected' : '' %>>24 Hours</option>
+            <option value="48" <%= notificationDuration == 48 ? 'selected' : '' %>>48 Hours</option>
+            <option value="72" <%= notificationDuration == 72 ? 'selected' : '' %>>72 Hours</option>
+            <option value="0" <%= notificationDuration == 0 ? 'selected' : '' %>>Permanent (No Expiry)</option>
+        </select>
+        
+        <input class="btn" type="submit" value="Start Notification" style="background: #e17055; margin-top:10px;">
     </form>
+    <form action="/clearNotification" method="post" style="text-align:center; margin-top:10px;">
+        <input class="btn" type="submit" value="Clear Now" style="background:#636e72;">
+    </form>
+</div>
+ <div >
+        <h3 style="text-align: center;">Two Dollar Product</h3>
+        <form class="admin1" action="/twoDollar" method="post" enctype="multipart/form-data">
+            <input class="input" placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+         
+            <input class="btn" type="submit" value="Create Two Dollar Product">
+        </form>
     </div>
+    <div >
+        <h3 style="text-align: center;">Rayal Product</h3>
+        <form class="admin1" action="/rayal" method="post" enctype="multipart/form-data">
+            <input class="input" placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+         
+            <input class="btn" type="submit" value="Create Rayal Product">
+        </form>
+    </div>
+    <div class="admin">
+        <h3 style="text-align: center;">Household/kitchen items</h3>
+        <form class="admin1" action="/dollar" method="post" enctype="multipart/form-data">
+            <input class="input" placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+         
+            <input class="btn" type="submit" value="Create Dollar Product">
+        </form>
+    </div>
+    
+
+    <div class="updateDollarPrice admin2" style="margin-top:30px; border-top:2px solid #ccc; padding-top:20px;">
+        <h3 style="text-align: center;">Update Dollar / Rayal Price</h3>
+        <form  class="admin1" action="/updateRate" method="post">
+            <input  class="input" placeholder="2 Dollar Rate (e.g. 540)" type="number" name="twoDollarRate" required>
+            <input  class="input" placeholder="Dollar Rate (e.g. 280)" type="number" name="dollarRate" required>
+            <input class="input"  placeholder="Rayal Rate (e.g. 75)" type="number" name="rayalRate" required>
+            <input class="btn" type="submit" value="Update Price">
+        </form>
+    </div>
+     <div class="admin3">
+        <h3 style="text-align: center;">Children Corner</h3>
+        <form class="admin1" action="/children" method="post" enctype="multipart/form-data">
+            <input class="input" placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+            <input class="btn" type="submit" value="Create Children Product">
+        </form>
+    </div>
+    <div class="admin4">
+      <h3 style="text-align: center;">Ladies Corner</h3>
+        <form class="admin1" action="/lady" method="post" enctype="multipart/form-data">
+            <input class="input"  placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+            <input class="btn" type="submit" value="Create Ladies Product">
+        </form>
+    </div>
+    <div class="admin5">
+    <h3 style="text-align: center;">Seasonal Items</h3>
+        <form class="admin1" action="/season" method="post" enctype="multipart/form-data">
+            <input class="input"  placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+            <input class="btn" type="submit" value="Create Season Product">
+        </form>
+    </div>
+    <div class="admin6">
+    <h3 style="text-align: center;">Misc Items</h3>
+        <form class="admin1" action="/other" method="post" enctype="multipart/form-data">
+            <input class="input"  placeholder="name" type="text" name="name" required>
+            <input class="file" type="file" name="image" accept="image/*" required>
+            <input class="btn" type="submit" value="Create Misc Product">
+        </form>
+    </div>
+    <div class="admin7" style="margin-top:30px; border-top:2px solid #ccc; padding-top:20px;">
+    <h3 style="text-align: center;">Change Dollar Page Background</h3>
+    <form class="admin1" action="/updateBgColor" method="post">
+        <label>Choose Color: </label>
+        <input type="color" name="bgColor" value="<%= typeof bgColor !== 'undefined' ? bgColor : '#ffffff' %>" style="height:40px; width:80px;">
+        <input   class="btn"type="submit" value="Update Background">
+    </form>
+</div>
 </body>
 </html>

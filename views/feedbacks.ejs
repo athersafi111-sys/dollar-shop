@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>All Feedbacks</title>
+    <link rel="stylesheet" href="/stylesheets/style.css"></head>
+<body style="padding:20px;">
+  <h2 style="text-align:center;">All User Feedbacks</h2>
+  <a href="/dollarAdmin" class="btn" style="text-decoration: none;">Back to Admin</a>
+  <div style="margin-top:20px;">
+    <% allFeedbacks.forEach(f=>{ %>
+      <div style="border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:5px; background:white;">
+        <b><%= f.name %></b> (<%= f.username %>) - <%= f.createdAt.toLocaleString('en-PK') %>
+        <p><%= f.message %></p>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
