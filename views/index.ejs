@@ -41,10 +41,10 @@ if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js'); }
     <img src="/images/Flag_of_Pakistan.svg.webp" height="20" width="50" style="border-radius:5px;position:relative;top:23px;box-shadow:1px 5px 5px;">
     <h2 style="text-align:center; font-size:25px;">Tamman 1 Dollar Shop</h2>
   </div>
-  <div style="display: flex;flex-direction: row;justify-content: space-between;">
+  <div style="display: flex;flex-direction: row;justify-content: space-around;">
     <h3 style="font-size:22px;color:#333;margin:20px 0 10px;text-align:center;font-family:'Jameel Noori Nastaleeq', serif;"><%= username %> : خوش آمدید</h3>
       <% if(isAdmin){ %>
-      <a class="btn" href="/logout" style="float:right;text-decoration: none;color: black;background: red;">Logout Admin</a>
+      <a class="btn1" href="/logout" style="float:right;text-decoration: none;color: black;background: red;text-align: center;height: 20px;margin-top: 30px;">Logout Admin</a>
     <% } %> 
 
   
