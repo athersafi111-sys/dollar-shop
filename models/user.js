@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
             others:[{type:mongoose.Schema.Types.ObjectId,ref:"other"}],
             premiums:[{type:mongoose.Schema.Types.ObjectId,ref:"premium"}],
             rayals:[{type:mongoose.Schema.Types.ObjectId,ref:"rayal"}],
+            // In your User model add:
+lastActive: { type: Date, default: Date.now }
 
 });
 module.exports = mongoose.model("user", userSchema);

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance</title>
+    <style>
+        body{font-family:Arial; background:#f5f5f5; padding:15px}
+       .card{background:white; padding:20px; border-radius:12px; margin-bottom:15px; box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+       .stat{font-size:26px; font-weight:bold; color:#007bff}
+       .grid{display:grid; grid-template-columns:1fr 1fr; gap:15px}
+       .keyword{display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee}
+       .badge{background:#007bff; color:white; padding:3px 10px; border-radius:20px; font-size:12px}
+    </style>
+</head>
+<body>
+    <a href="/dollarAdmin" class="btn">← Back to Admin</a>
+    <h1>📊 Dollar Shop Performance</h1>
+
+    <div class="grid">
+        <div class="card">
+            <p>Total Users</p>
+            <p class="stat" id="totalUsers">0</p>
+        </div>
+        <div class="card">
+            <p>Active Today</p>
+            <p class="stat" id="activeToday" style="color:#28a745">0</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <p>App watch time total</p>
+        <p class="stat" id="watchTime">Loading...</p>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <p>Most Visited Page</p>
+            <p class="stat" id="mostVisited" style="font-size:18px">Loading...</p>
+        </div>
+        <div class="card">
+            <p>Least Visited Page</p>
+            <p class="stat" id="leastVisited" style="font-size:18px; color:#dc3545">Loading...</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>🔥 Top Search Keywords</h3>
+        <div id="topKeywords">Loading...</div>
+    </div>
+
+<script>
+let startTime = Date.now();
+let sent = false;
+function sendTime(){
+    if(sent) return; sent=true;
+    let t = Math.floor((Date.now()-startTime)/1000);
+    fetch('/api/track-time',{method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({time:t})});
+}
+window.addEventListener('beforeunload', sendTime);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden') sendTime(); });
+
+async function load(){
+    let res = await fetch('/api/performance-stats');
+    let d = await res.json();
+
+    document.getElementById('totalUsers').innerText = d.totalUsers;
+    document.getElementById('activeToday').innerText = d.activeToday;
+
+    let h=Math.floor(d.totalWatchTime/3600), m=Math.floor((d.totalWatchTime%3600)/60);
+    document.getElementById('watchTime').innerText = `${h}h ${m}m (${d.totalWatchTime}s)`;
+document.getElementById('mostVisited').innerText = `${d.mostVisited.displayName} - ${d.mostVisited.page} (${d.mostVisited.visits})`;
+document.getElementById('leastVisited').innerText = `${d.leastVisited.displayName} - ${d.leastVisited.page} (${d.leastVisited.visits})`;
+
+    let kwHtml='';
+    d.topKeywords.forEach((k,i)=>{
+        kwHtml+=`<div class="keyword"><span>${i+1}. ${k.keyword}</span> <span class="badge">${k.count}</span></div>`;
+    });
+    document.getElementById('topKeywords').innerHTML = kwHtml || 'No searches yet';
+}
+load();
+setInterval(load,5000);
+</script>
+</body>
+</html>

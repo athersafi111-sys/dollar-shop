@@ -37,8 +37,10 @@
     <img src="/images/Flag_of_Pakistan.svg.webp" height="20" width="50" style="border-radius:5px;position:relative;top:23px;box-shadow:1px 5px 5px;">
     <h2 style="text-align:center; font-size:25px;">Tamman 1 Dollar Shop</h2>
   </div>
-      
-  <h3 style="margin-top: 2px;margin-bottom: 2px;"><%= username %> Welcome <span style="position:relative;left:190px;">خوش آمدید</span></h3>
+      <% if(isAdmin){ %>
+      <a class="btn"  href="/logout" style="float:right;text-decoration: none;color: black;background: red;">Logout Admin</a>
+    <% } %> <br>
+  <h3 style="margin-top: 2px;margin-bottom: 2px;"><%= username %> Welcome <span style="position:relative;left:100px;">خوش آمدید</span></h3>
   <div class="calenders" style="display:flex; justify-content:space-between; align-items:center; background:white; border:2px solid #23e911;background-color: #23e911; border-radius:12px; padding:2px 15px; margin:5px 0; box-shadow:0 3px 10px rgba(0,0,0,0.1); flex-wrap:wrap; gap:10px;">
   <div style="text-align:left; flex:1;">
     <small style="color:#636e72; font-weight:bold; font-size:11px;">ENGLISH</small>
@@ -82,9 +84,7 @@ setInterval(updateCalendars, 1000);
     <% if(username){ %>
     <a class='nav-item' href="/logout">Logout</a>
   <% } %>
-  <% if(isAdmin){ %>
-      <a class="" href="/logout" style="float:right;text-decoration: none;color: black;">Logout Admin</a>
-    <% } %>
+ 
   </nav>
 
   <% if(typeof notification !== 'undefined' && notification && notification.trim() !== ''){ %>

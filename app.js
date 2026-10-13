@@ -28,6 +28,9 @@ const dollarModel = require('./models/dollar');
 const childrenModel = require('./models/children');
 const ladyModel = require('./models/lady');
 const settingModel = require('./models/setting');
+const pageStatsModel = require('./models/pageStats'); // ADD THIS
+const appStatsModel = require('./models/appStats'); // ADD THIS
+const searchKeywordModel = require('./models/searchKeyword'); // ADD THIS
 
 if(!process.env.MONGO_URI) { console.error("❌ MONGO_URI missing"); process.exit(1); }
 
@@ -45,6 +48,25 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage, limits: { fileSize: 2*1024*1024 } });
 
 app.use(session({ secret: process.env.SESSION_SECRET || "secret123", resave: false, saveUninitialized: false, cookie: { httpOnly: true, maxAge: 86400000 } }));
+
+// ==== PERFORMANCE TRACKING MIDDLEWARE ====
+app.use(async (req,res,next)=>{
+    // 1. Track active user
+    if(req.session && req.session.username && req.session.username!== "Admin"){
+        try{
+            await userModel.findOneAndUpdate({userName: req.session.username}, {lastActive: new Date()});
+        }catch(e){}
+    }
+    // 2. Track page visits
+    if(!req.path.includes('.') &&!req.path.startsWith('/api/')){
+        res.on('finish', async ()=>{
+            try{
+                await pageStatsModel.findOneAndUpdate({page: req.path}, {$inc:{visits:1}}, {upsert:true});
+            }catch(e){}
+        });
+    }
+    next();
+});
 
 function isAdminAuth(req,res,next){ if(req.session.isAdmin) return next(); return res.redirect('/login?error=Admin required'); }
 
@@ -129,5 +151,65 @@ app.post('/updateNotification', isAdminAuth, async(req,res)=>{ let {notification
 app.post('/clearNotification', isAdminAuth, async(req,res)=>{ let r=await settingModel.findOne(); if(r){r.notification="";r.notificationExpiresAt=null;await r.save();} res.redirect('/dollarAdmin'); });
 app.post('/changeAdminPassword', isAdminAuth, async(req,res)=>{ let {currentPassword,newEmail,newPassword,confirmPassword}=req.body; let r=await getSettings(); if(!await bcrypt.compare(currentPassword,r.adminPassword)) return res.redirect('/changeAdminPassword?error=Wrong current'); if(newPassword!==confirmPassword) return res.redirect('/changeAdminPassword?error=Not matched'); r.adminEmail=newEmail.trim().toLowerCase(); r.adminPassword=await bcrypt.hash(newPassword.trim(),10); await r.save(); res.redirect('/changeAdminPassword?msg=Changed ✓'); });
 app.post('/feedback', async(req,res)=>{ await feedbackModel.create({name:req.body.name.trim(),message:req.body.message.trim(),username:req.session.username||"Guest"}); res.render('feedBack',{name:req.body.name}); });
+
+// ==== PERFORMANCE API ====
+app.post('/api/track-time', async (req,res)=>{
+    const { time } = req.body;
+    if(!time) return res.json({ok:true});
+    let stats = await appStatsModel.findOne();
+    if(!stats) stats = await appStatsModel.create({totalWatchTime: 0});
+    stats.totalWatchTime += parseInt(time);
+    await stats.save();
+    res.json({success:true});
+});
+
+// Add name mapping
+const pageNames = {
+    '/': 'Home Page',
+    '/dollar': 'Dollar Products',
+    '/twoDollar': 'Two Dollar Products',
+    '/rayal': 'Rayal Products',
+    '/dollarAdmin': 'Admin Panel',
+    '/users': 'Users List',
+    '/login': 'Login Page',
+    '/signup': 'Signup Page',
+    '/performance': 'Performance Page'
+};
+
+app.get('/api/performance-stats', async (req,res)=>{
+    let allPages = await pageStatsModel.find().sort({visits:-1});
+    let total = await appStatsModel.findOne();
+    let totalUsers = await userModel.countDocuments();
+    const dayAgo = new Date(Date.now() - 24*60*60*1000);
+    let activeToday = await userModel.countDocuments({lastActive: {$gte: dayAgo}});
+    let topKeywords = await searchKeywordModel.find().sort({count:-1}).limit(10);
+
+    // Convert / to readable names
+    let mappedPages = allPages.map(p => ({
+        ...p._doc,
+        displayName: pageNames[p.page] || p.page
+    }));
+
+    res.json({
+        totalWatchTime: total? total.totalWatchTime : 0,
+        mostVisited: mappedPages[0] || {displayName:'None', page:'None', visits:0},
+        leastVisited: mappedPages[mappedPages.length-1] || {displayName:'None', page:'None', visits:0},
+        allPages: mappedPages,
+        totalUsers,
+        activeToday,
+        topKeywords
+    });
+});
+
+app.get('/performance', isAdminAuth, async (req,res)=>{
+    res.render('performance');
+});
+
+// Track search if you have search - add in your search route like this:
+// app.get('/search', async(req,res)=>{
+// let q = req.query.q?.toLowerCase().trim();
+// if(q) await searchKeywordModel.findOneAndUpdate({keyword:q}, {$inc:{count:1}}, {upsert:true});
+//...
+// });
 
 app.listen(process.env.PORT||10000, ()=>console.log("Server on "+(process.env.PORT||10000)));
