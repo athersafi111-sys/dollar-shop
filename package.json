@@ -4,14 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-  "start": "node app.js",
-  "dev": "node app.js"
-},
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
     "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",
     "dotenv": "^18.0.5",

@@ -5,42 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tamman 1 Dollar Shop</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="manifest" href="/manifest.json">
+<script>
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js'); }
+</script>
   <style>
 .notification-bar{
-  background: linear-gradient(90deg, #fef9c3, #fef08a) !important;
-  color: #854d0e !important;
+  background: linear-gradient(90deg, #fef9c3, #fef08a)!important;
+  color: #854d0e!important;
   border: 1px solid #fde047;
   border-radius: 10px;
   margin: 10px 12px;
-  width: auto !important;
-  box-shadow: none !important;
+  width: auto!important;
+  box-shadow: none!important;
   font-size: 13px;
 }
-    .notification-track{ display: inline-block; animation: scroll 15s linear infinite; }
+   .notification-track{ display: inline-block; animation: scroll 15s linear infinite; }
     @keyframes scroll { 0% { transform: translateX(-40%); } 100% { transform: translateX(-100%); } }
-   .feedback-box{
+  .feedback-box{
   background: white; border: 1px solid #e2e8f0; border-radius: 16px;
-  padding: 18px; margin: 12px auto; max-width: 500px; 
+  padding: 18px; margin: 12px auto; max-width: 500px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-    .feedback-box h3{ text-align:center; margin-bottom:10px; color:#2d3436; }
-    .feedback-box input, .feedback-box textarea{
+   .feedback-box h3{ text-align:center; margin-bottom:10px; color:#2d3436; }
+   .feedback-box input,.feedback-box textarea{
       width: 95%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px;
     }
- .feedback-box button{
+.feedback-box button{
   background: #16a34a; color: white; border-radius: 10px; padding: 12px;
 }
   </style>
 </head>
-<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor !== 'undefined' ? bgColor : '#ffffff' %>; min-height:100vh;">
+<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor!== 'undefined'? bgColor : '#ffffff' %>; min-height:100vh;">
   <div style="display: flex;justify-content: center;gap: 8px;border-radius: 0 0 30px 30px;background-color: rgb(35, 233, 17);margin-top: 0%;">
     <img src="/images/Flag_of_Pakistan.svg.webp" height="20" width="50" style="border-radius:5px;position:relative;top:23px;box-shadow:1px 5px 5px;">
     <h2 style="text-align:center; font-size:25px;">Tamman 1 Dollar Shop</h2>
   </div>
       <% if(isAdmin){ %>
-      <a class="btn"  href="/logout" style="float:right;text-decoration: none;color: black;background: red;">Logout Admin</a>
+      <a class="btn" href="/logout" style="float:right;text-decoration: none;color: black;background: red;">Logout Admin</a>
     <% } %> <br>
-  <h3 style="margin-top: 2px;margin-bottom: 2px;"><%= username %> Welcome <span style="position:relative;left:100px;">خوش آمدید</span></h3>
+
+  <h3 style="text-align: center; margin-top: 2px;margin-bottom: 2px;">خوش آمدید</h3>
+
   <div class="calenders" style="display:flex; justify-content:space-between; align-items:center; background:white; border:2px solid #23e911;background-color: #23e911; border-radius:12px; padding:2px 15px; margin:5px 0; box-shadow:0 3px 10px rgba(0,0,0,0.1); flex-wrap:wrap; gap:10px;">
   <div style="text-align:left; flex:1;">
     <small style="color:#636e72; font-weight:bold; font-size:11px;">ENGLISH</small>
@@ -53,7 +59,6 @@
     <div id="hijriDate" style="font-size:15px; font-weight:bold; color:#2d3436; font-family:'Jameel Noori Nastaleeq', serif;"></div>
     <div id="hijriTime" style="font-size:12px; color:#636e72;"></div>
   </div>
-
 </div>
 
 <script>
@@ -84,17 +89,16 @@ setInterval(updateCalendars, 1000);
     <% if(username){ %>
     <a class='nav-item' href="/logout">Logout</a>
   <% } %>
- 
   </nav>
 
-  <% if(typeof notification !== 'undefined' && notification && notification.trim() !== ''){ %>
+  <% if(typeof notification!== 'undefined' && notification && notification.trim()!== ''){ %>
   <div class="notification-bar">
     <div class="notification-track">
       <span>🔔 <%= notification %> &nbsp;&nbsp;&nbsp; 🔔 <%= notification %> &nbsp;&nbsp;&nbsp; 🔔 <%= notification %></span>
     </div>
   </div>
   <% } %>
-      
+
   <section id="content">
     <figure onclick="window.location.href='/twoDollar'">
       <img class="folder" style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
@@ -121,11 +125,11 @@ setInterval(updateCalendars, 1000);
   </section>
 
   <script>
-    if('<%= typeof notification !== "undefined" ? notification : "" %>' !== ''){
-      if(Notification && Notification.permission !== "denied"){
+    if('<%= typeof notification!== "undefined"? notification : "" %>'!== ''){
+      if(Notification && Notification.permission!== "denied"){
         Notification.requestPermission().then(perm=>{
           if(perm === "granted"){
-            new Notification("Tamman 1 Dollar Shop", { body: "<%= typeof notification !== 'undefined' ? notification : '' %>", icon: "/images/folder.png" });
+            new Notification("Tamman 1 Dollar Shop", { body: "<%= typeof notification!== 'undefined'? notification : '' %>", icon: "/images/folder.png" });
           }
         });
       }

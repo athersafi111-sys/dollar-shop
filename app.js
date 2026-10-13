@@ -205,11 +205,6 @@ app.get('/performance', isAdminAuth, async (req,res)=>{
     res.render('performance');
 });
 
-// Track search if you have search - add in your search route like this:
-// app.get('/search', async(req,res)=>{
-// let q = req.query.q?.toLowerCase().trim();
-// if(q) await searchKeywordModel.findOneAndUpdate({keyword:q}, {$inc:{count:1}}, {upsert:true});
-//...
-// });
+
 
 app.listen(process.env.PORT||10000, ()=>console.log("Server on "+(process.env.PORT||10000)));

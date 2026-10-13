@@ -1,0 +1,15 @@
+{
+  "name": "Dollar Shop",
+  "short_name": "Dollar Shop",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007bff",
+  "icons": [
+    {
+      "src": "/images/Dollar.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

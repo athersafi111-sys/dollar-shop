@@ -1,0 +1,10 @@
+{
+  "appId": "com.dollarshop.app",
+  "appName": "Dollar Shop",
+  "webDir": "public",
+  "server": {
+    "url": "https://dollar-shop-bn6w.onrender.com",
+    "cleartext": true,
+    "androidScheme": "https"
+  }
+}
