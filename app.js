@@ -152,7 +152,6 @@ app.post('/clearNotification', isAdminAuth, async(req,res)=>{ let r=await settin
 app.post('/changeAdminPassword', isAdminAuth, async(req,res)=>{ let {currentPassword,newEmail,newPassword,confirmPassword}=req.body; let r=await getSettings(); if(!await bcrypt.compare(currentPassword,r.adminPassword)) return res.redirect('/changeAdminPassword?error=Wrong current'); if(newPassword!==confirmPassword) return res.redirect('/changeAdminPassword?error=Not matched'); r.adminEmail=newEmail.trim().toLowerCase(); r.adminPassword=await bcrypt.hash(newPassword.trim(),10); await r.save(); res.redirect('/changeAdminPassword?msg=Changed ✓'); });
 app.post('/feedback', async(req,res)=>{ await feedbackModel.create({name:req.body.name.trim(),message:req.body.message.trim(),username:req.session.username||"Guest"}); res.render('feedBack',{name:req.body.name}); });
 
-// ==== PERFORMANCE API ====
 app.post('/api/track-time', async (req,res)=>{
     const { time } = req.body;
     if(!time) return res.json({ok:true});
