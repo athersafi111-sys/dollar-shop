@@ -6,7 +6,7 @@
     <title>Document</title>
      <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body class="dollarDisplayPage" style="background-color:<%= bgColor %>;min-height : 100vh;">
+<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor!== 'undefined'? bgColor : '#ffffff' %>!important; min-height:100vh;">
       <h1 style="text-align: center;">Dollar Admin</h1>
       <div style="margin-bottom: 10px;display: flex;justify-content: space-between;align-items: center;font-size: 10px;">
         <button class="btn" onclick="window.location.href='/'"> Home</button>

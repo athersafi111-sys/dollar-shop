@@ -22,7 +22,7 @@
       .delete:hover{ background:#fecaca; }
     </style>
 </head>
-<body>
+<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor!== 'undefined'? bgColor : '#ffffff' %>!important; min-height:100vh;">
   <div class="header">
     <a href="/dollarAdmin" class="btn">← Back to Admin</a>
     <span style="color:#64748b; font-size:13px;"><%= users.length %> users</span>

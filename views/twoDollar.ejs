@@ -24,7 +24,7 @@
   }
 </style>
 </head>
-<body class="dollarDisplayPage" style="background-color:<%= bgColor %>;min-height : 100vh;">
+<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor!== 'undefined'? bgColor : '#ffffff' %>!important; min-height:100vh;">
     <h1 style="text-align: center;">Two Dollar Page</h1>
     
     <button class="btn" onclick="window.location.href='/'">Home</button>

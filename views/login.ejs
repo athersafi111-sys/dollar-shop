@@ -7,7 +7,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
-<body>
+<body class="dollarDisplayPage" style="background-color:<%= typeof bgColor!== 'undefined'? bgColor : '#ffffff' %>!important; min-height:100vh;">
     <h1 style="text-align: center;">Login page</h1>
     <fieldset >
     <form class="login" action="/login" method="post">
