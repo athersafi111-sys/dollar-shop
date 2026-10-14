@@ -48,8 +48,6 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage, limits: { fileSize: 2*1024*1024 } });
 
 app.use(session({ secret: process.env.SESSION_SECRET || "secret123", resave: false, saveUninitialized: false, cookie: { httpOnly: true, maxAge: 86400000 } }));
-
-// ==== PERFORMANCE TRACKING MIDDLEWARE ====
 app.use(async (req,res,next)=>{
     // 1. Track active user
     if(req.session && req.session.username && req.session.username!== "Admin"){
@@ -80,9 +78,34 @@ async function getSettings(){
 }
 
 app.get('/', async (req,res)=>{
-    let last = await dollarModel.findOne().sort({updatedAt:-1}).catch(()=>null);
-    let rates = await getSettings();
-    res.render('index',{ username:req.session.username||"", isAdmin:req.session.isAdmin||false, lastUpdated:last?last.updatedAt:new Date(), twoDollarRate:rates.twoDollarRate, dollarRate:rates.dollarRate, rayalRate:rates.rayalRate, notification:rates.notification||"", bgColor:rates.dollarBgColor });
+    try{
+        let rates = await getSettings();
+        // Get latest date from ALL product tables
+        let allModels = [dollarModel, childrenModel, ladyModel, seasonModel, otherModel, premiumModel, rayalModel];
+        let latestDate = null;
+        for(let M of allModels){
+            let lastItem = await M.findOne().sort({updatedAt:-1, createdAt:-1}).catch(()=>null);
+            if(lastItem){
+                let d = lastItem.updatedAt || lastItem.createdAt;
+                if(d && (!latestDate || new Date(d) > new Date(latestDate))){
+                    latestDate = d;
+                }
+            }
+        }
+        res.render('index',{ 
+            username:req.session.username||"", 
+            isAdmin:req.session.isAdmin||false, 
+            lastUpdated: latestDate || new Date(), 
+            twoDollarRate:rates.twoDollarRate, 
+            dollarRate:rates.dollarRate, 
+            rayalRate:rates.rayalRate, 
+            notification:rates.notification||"", 
+            bgColor:rates.dollarBgColor 
+        });
+    }catch(e){
+        console.log("HOME ERROR", e);
+        res.render('index',{ username:"", isAdmin:false, lastUpdated:new Date(), twoDollarRate:540, dollarRate:270, rayalRate:75, notification:"", bgColor:"#ffffff" });
+    }
 });
 app.get('/signup',(req,res)=>res.render('signup'));
 app.get('/login',(req,res)=>res.render('login',{error:req.query.error||""}));
