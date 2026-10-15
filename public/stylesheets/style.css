@@ -12,14 +12,9 @@ body{
    cursor: default;
 }
 body.dollarDisplayPage > div:first-child{
-  background: linear-gradient(135deg, #16a34a, #0f9d41) !important;
-  border-radius: 0 0 22px 22px !important;
-  padding: 14px !important;
-  box-shadow: 0 8px 20px rgba(22,163,74,0.25) !important;
-  border: none !important;
 }
 body.dollarDisplayPage > div:first-child h2{
-  color: white !important;
+
   font-weight: 800 !important;
   font-size: 22px !important;
   letter-spacing: 0.5px;

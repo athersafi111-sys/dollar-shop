@@ -20,7 +20,8 @@ if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js'); }
   </style>
 </head>
 <body class="dollarDisplayPage" style="background-color:<%= typeof bgColor!== 'undefined'? bgColor : '#ffffff' %>!important; min-height:100vh;">
-  <div style="display: flex;justify-content: center;gap: 8px;border-radius: 0 0 30px 30px;background-color: rgb(35, 233, 17);margin-top: 0%;">
+  <div style="display: flex;justify-content: center; box-shadow: 0 8px 20px rgba(22,163,74,0.25) !important;  border-radius: 0 0 22px 22px !important;
+  padding: 14px !important;border: none !important;  color: white !important;gap: 8px;border-radius: 0 0 30px 30px; background: linear-gradient(135deg, #16a34a, #0f9d41) !important;margin-top: 0%;">
     <img src="/images/Flag_of_Pakistan.svg.webp" height="20" width="50" style="border-radius:5px;position:relative;top:23px;box-shadow:1px 5px 5px;">
     <h2 style="text-align:center; font-size:25px;">Tamman 1 Dollar Shop</h2>
   </div>
@@ -63,7 +64,7 @@ updateCalendars();
 setInterval(updateCalendars, 1000);
 </script>
   <nav id="nav-bar">
-    <a class='nav-item' href="">Location</a>
+    <a class='nav-item' href="/tamman">Location</a>
     <a class='nav-item' href="">Offers</a>
     <a class='nav-item' href="/Signup">Signup</a>
     <a class='nav-item' href="/login">Login</a>
@@ -81,15 +82,15 @@ setInterval(updateCalendars, 1000);
   <section id="content">
     <figure onclick="window.location.href='/twoDollar'">
       <img class="folder" style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
-      <figcaption class="seperator">2 Dollar <br> <%= twoDollarRate %> Rupees</figcaption>
+      <figcaption class="seperator">2 Dollar Items<br> <%= twoDollarRate %> Rupees</figcaption>
     </figure>
     <figure onclick="window.location.href='/dollar'">
       <img style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
-      <figcaption class="seperator">1 Dollar <br> <%= dollarRate %> Rupees</figcaption>
+      <figcaption class="seperator">1 Dollar Items<br> <%= dollarRate %> Rupees</figcaption>
     </figure>
     <figure onclick="window.location.href='/rayal'">
       <img style="filter:drop-shadow(1px 5px 5px rgba(182,148,148,0.7));" src="/images/folder.png" height="80px" width="80px">
-      <figcaption class="seperator">1 Rayal<br><%= rayalRate %> Rupees</figcaption>
+      <figcaption class="seperator">1 Rayal Items<br><%= rayalRate %> Rupees</figcaption>
     </figure>
     <div class="feedback-box">
       <h3>💬 Give Your Feedback / رائے دیں</h3>

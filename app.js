@@ -141,7 +141,9 @@ app.get("/deleteUser/:id", isAdminAuth, async(req,res)=>{ await userModel.findBy
 app.get('/editUser/:id', isAdminAuth, async(req,res)=>{ let user=await userModel.findById(req.params.id); res.render('editUser',{user}); });
 app.post('/updateUser/:id', isAdminAuth, upload.single('image'), async(req,res)=>{ let up={userName:req.body.userName.trim(),email:req.body.email.trim().toLowerCase()}; if(req.file) up.image=req.file.path; await userModel.findByIdAndUpdate(req.params.id,up); res.redirect('/users'); });
 app.get('/logout',(req,res)=>{ req.session.destroy(()=>{ res.clearCookie('connect.sid'); res.redirect('/login'); }); });
-
+app.get("/tamman",function (req,res){
+    res.render("tamman")
+})
 app.post("/create", upload.single('image'), async(req,res)=>{
     try{
         let {name,email,password}=req.body; email=email.trim().toLowerCase(); let exist=await userModel.findOne({email}); if(exist) return res.send("Email exists");
