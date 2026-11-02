@@ -80,7 +80,6 @@ async function getSettings(){
 app.get('/', async (req,res)=>{
     try{
         let rates = await getSettings();
-        // Get latest date from ALL product tables
         let allModels = [dollarModel, childrenModel, ladyModel, seasonModel, otherModel, premiumModel, rayalModel];
         let latestDate = null;
         for(let M of allModels){
@@ -186,8 +185,6 @@ app.post('/api/track-time', async (req,res)=>{
     await stats.save();
     res.json({success:true});
 });
-
-// Add name mapping
 const pageNames = {
     '/': 'Home Page',
     '/dollar': 'Dollar Products',
@@ -207,8 +204,6 @@ app.get('/api/performance-stats', async (req,res)=>{
     const dayAgo = new Date(Date.now() - 24*60*60*1000);
     let activeToday = await userModel.countDocuments({lastActive: {$gte: dayAgo}});
     let topKeywords = await searchKeywordModel.find().sort({count:-1}).limit(10);
-
-    // Convert / to readable names
     let mappedPages = allPages.map(p => ({
         ...p._doc,
         displayName: pageNames[p.page] || p.page
