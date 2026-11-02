@@ -143,6 +143,7 @@ app.get('/logout',(req,res)=>{ req.session.destroy(()=>{ res.clearCookie('connec
 app.get("/tamman",function (req,res){
     res.render("tamman")
 })
+app.get('/offer',(req,res)=>res.render('offer'));
 app.post("/create", upload.single('image'), async(req,res)=>{
     try{
         let {name,email,password}=req.body; email=email.trim().toLowerCase(); let exist=await userModel.findOne({email}); if(exist) return res.send("Email exists");
