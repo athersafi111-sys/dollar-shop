@@ -163,11 +163,11 @@ box-shadow: 2px 10px 10px rgb(192, 190, 190) ;
 .notification-track{
   display:inline-block;
   padding-right:100%;
-  animation: scroll-left 25s linear infinite;
+  animation: scroll-right 20s linear infinite;
 }
-@keyframes scroll-left{
-  0% { transform: translateX(0); }
-  100% { transform: translatex(100%); }
+@keyframes scroll-right{
+  0% { transform: translateX(-80%); }
+  100% { transform: translateX(80%); }
 }
 .notification-bar:hover .notification-track{
   animation-play-state: paused;
