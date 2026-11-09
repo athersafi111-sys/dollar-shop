@@ -11,8 +11,6 @@ body{
    background: #f8fafc !important;
    cursor: default;
 }
-body.dollarDisplayPage > div:first-child{
-}
 body.dollarDisplayPage > div:first-child h2{
 
   font-weight: 800 !important;
@@ -107,14 +105,14 @@ body.dollarDisplayPage > div:first-child h2{
     transform: scale(1.03);
 }
 .products,.childrens,.ladies,.seasons,.others{
-    box-shadow: 2px 10px 10px rgb(10, 0, 0) ;
+    box-shadow: 2px 5px 5px rgb(10, 0, 0) ;
     background-color: rgb(246, 250, 248);
     display: flex;
     border-radius: 10px;
     flex-wrap: wrap;
     column-gap:8px ;
     row-gap: 8px;
-    height: 350px;
+    height: 340px;
     overflow: scroll;
     padding: 20px;
     font-size: 10px;
@@ -164,12 +162,12 @@ box-shadow: 2px 10px 10px rgb(192, 190, 190) ;
 }
 .notification-track{
   display:inline-block;
-  padding-left:100%;
+  padding-right:100%;
   animation: scroll-left 25s linear infinite;
 }
 @keyframes scroll-left{
   0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  100% { transform: translatex(100%); }
 }
 .notification-bar:hover .notification-track{
   animation-play-state: paused;
